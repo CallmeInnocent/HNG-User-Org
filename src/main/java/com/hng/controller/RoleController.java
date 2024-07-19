@@ -5,8 +5,8 @@ import com.hng.dto.RoleCreationRequestDto;
 import com.hng.dto.RoleCreationResponseDto;
 import com.hng.service.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,15 +18,14 @@ public class RoleController {
     private RoleService roleService;
 
     @PostMapping("/create")
-//    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('SUPER_ADMIN')")
     public ResponseEntity<RoleCreationResponseDto> createRole(@RequestBody RoleCreationRequestDto createRequestDto, Authentication authentication) {
         try {
-             roleService.createRole(createRequestDto.getRoleName(), createRequestDto.getOrganisationId(), createRequestDto.getPermissionNames(), authentication);
+            roleService.createRole(createRequestDto.getRoleName(), createRequestDto.getOrganisationId(), createRequestDto.getPermissionNames(), authentication);
             RoleCreationResponseDto responseDto = new RoleCreationResponseDto("201", "Role created successfully.");
-            return ResponseEntity.status(201).body(responseDto);
+            return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);
         } catch (Exception e) {
             RoleCreationResponseDto responseDto = new RoleCreationResponseDto(" 400", "Role creation failed.");
-            return ResponseEntity.status(400).body(responseDto);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseDto);
         }
     }
 

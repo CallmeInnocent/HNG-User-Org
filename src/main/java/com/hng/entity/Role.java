@@ -3,11 +3,13 @@ package com.hng.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
+
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Data
+@Table(name = "role")
 public class Role {
     @Id
     @GeneratedValue(generator = "customRoleIdGenerator")
@@ -28,8 +30,6 @@ public class Role {
             inverseJoinColumns = @JoinColumn(name = "permission_id")
     )
     private List<Permission> permissions = new ArrayList<>();
-
-
 
 
     @ManyToMany(mappedBy = "roles")
