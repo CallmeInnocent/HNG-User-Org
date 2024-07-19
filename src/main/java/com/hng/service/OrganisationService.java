@@ -25,12 +25,12 @@ public class OrganisationService {
     public Organisation createOrganisation(User user) {
         Organisation organisation = new Organisation();
         organisation.setName(user.getFirstName() + "'s Organisation");
-        organisation.setUser(user);
+        organisation.getUsers().add(user);
         return organisationRepository.save(organisation);
     }
 
     public OrganisationResponseDTO findByUser(User user) {
-        List<Organisation> organisations = organisationRepository.findByUser(user);
+        List<Organisation> organisations = organisationRepository.findByUsers(user);
 
         List<OrganisationDetail> organisationDetails = organisations.stream()
                 .map(org -> new OrganisationDetail(org.getOrgId(), org.getName(), org.getDescription()))
@@ -43,7 +43,7 @@ public class OrganisationService {
 
 
     public OrganisationResponseDTO findOrganisationById(User user, String orgId) {
-        Organisation organisation = organisationRepository.findByUser(user).stream()
+        Organisation organisation = organisationRepository.findByUsers(user).stream()
                 .filter(org -> org.getOrgId().equals(orgId))
                 .findFirst()
                 .orElseThrow(() -> new RuntimeException("Organisation not found"));

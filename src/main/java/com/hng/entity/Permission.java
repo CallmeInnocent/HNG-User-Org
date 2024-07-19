@@ -1,26 +1,31 @@
 package com.hng.entity;
 
+
+
+
 import jakarta.persistence.*;
 import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
 import jakarta.validation.constraints.NotBlank;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
 @Data
-public class Organisation {
+@Table(name = "permissions")
+public class Permission {
     @Id
     @GeneratedValue(generator = "UUID")
     @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
-    private String orgId;
+    private String permissionId;
 
     @NotBlank
     private String name;
 
-    private String description;
-
-    @ManyToMany(mappedBy = "organisations")
-    private Set<User> users = new HashSet<>();
+    @ManyToMany(mappedBy = "permissions")
+    private List<Role> roles = new ArrayList<>();
 }
+

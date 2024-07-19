@@ -16,7 +16,7 @@ import java.util.Set;
 
 @Entity
 @Data
-@Table(name = "users") // Specify the table name here
+@Table(name = "users")
 public class User implements UserDetails {
 
     @Id
@@ -41,10 +41,6 @@ public class User implements UserDetails {
 
     private String phone;
 
-    @ManyToOne
-    @JoinColumn(name = "org_id")
-    private Organisation organisation;
-
     @ManyToMany
     @JoinTable(
             name = "user_organisation",
@@ -52,6 +48,14 @@ public class User implements UserDetails {
             inverseJoinColumns = @JoinColumn(name = "org_id")
     )
     private Set<Organisation> organisations = new HashSet<>();
+
+    @ManyToMany
+    @JoinTable(
+            name = "user_role",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id")
+    )
+    private Set<Role> roles = new HashSet<>();
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -62,4 +66,24 @@ public class User implements UserDetails {
     public String getUsername() {
         return email;
     }
+
+//    @Override
+//    public boolean isAccountNonExpired() {
+//        return true;
+//    }
+
+//    @Override
+//    public boolean isAccountNonLocked() {
+//        return true;
+//    }
+//
+//    @Override
+//    public boolean isCredentialsNonExpired() {
+//        return true;
+//    }
+//
+//    @Override
+//    public boolean isEnabled() {
+//        return true;
+//    }
 }

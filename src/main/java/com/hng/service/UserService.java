@@ -1,19 +1,30 @@
 package com.hng.service;
 
 import com.hng.dto.UserRegistrationRequestDto;
+import com.hng.entity.Permission;
+import com.hng.entity.Role;
 import com.hng.entity.User;
+import com.hng.repository.PermissionRepository;
+import com.hng.repository.RoleRepository;
 import com.hng.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class UserService {
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private RoleRepository roleRepository;
+
+    @Autowired
+    private PermissionRepository permissionRepository;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -25,7 +36,6 @@ public class UserService {
         user.setPhone(userRegistrationRequestDto.getPhone());
         user.setFirstName(userRegistrationRequestDto.getFirstName());
         user.setLastName(userRegistrationRequestDto.getLastName());
-        user.setPhone(userRegistrationRequestDto.getPhone());
         return userRepository.save(user);
     }
 
@@ -33,13 +43,8 @@ public class UserService {
         return userRepository.findById(userId);
     }
 
-
-
     public Optional<User> findByEmail(String email) {
         return userRepository.findByEmail(email);
     }
-//
-//    public List<User> findAllUsers() {
-//        return userRepository.findAll();
-//    }
+
 }
