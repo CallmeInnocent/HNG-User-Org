@@ -7,6 +7,7 @@ import com.hng.service.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -17,10 +18,10 @@ public class RoleController {
     private RoleService roleService;
 
     @PostMapping("/create")
-    @PreAuthorize("hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_SUPER_ADMIN')")
-    public ResponseEntity<RoleCreationResponseDto> createRole(@RequestBody RoleCreationRequestDto createRequestDto) {
+//    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('SUPER_ADMIN')")
+    public ResponseEntity<RoleCreationResponseDto> createRole(@RequestBody RoleCreationRequestDto createRequestDto, Authentication authentication) {
         try {
-             roleService.createRole(createRequestDto.getRoleName(), createRequestDto.getOrganisationId(), createRequestDto.getPermissionNames());
+             roleService.createRole(createRequestDto.getRoleName(), createRequestDto.getOrganisationId(), createRequestDto.getPermissionNames(), authentication);
             RoleCreationResponseDto responseDto = new RoleCreationResponseDto("201", "Role created successfully.");
             return ResponseEntity.status(201).body(responseDto);
         } catch (Exception e) {

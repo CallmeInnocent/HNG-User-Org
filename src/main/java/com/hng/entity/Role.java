@@ -10,8 +10,8 @@ import java.util.List;
 @Data
 public class Role {
     @Id
-    @GeneratedValue(generator = "UUID")
-    @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
+    @GeneratedValue(generator = "customRoleIdGenerator")
+    @GenericGenerator(name = "customRoleIdGenerator", strategy = "com.hng.util.CustomRoleIdGenerator")
     private String roleId;
 
     @Column(unique = true)

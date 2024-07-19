@@ -1,6 +1,9 @@
 package com.hng.service;
 
 
+import com.hng.dto.OrganisationData;
+import com.hng.dto.OrganisationDetail;
+import com.hng.dto.OrganisationResponseDTO;
 import com.hng.entity.Role;
 import com.hng.entity.Organisation;
 import com.hng.entity.Permission;
@@ -9,18 +12,25 @@ import com.hng.repository.OrganisationRepository;
 import com.hng.repository.RoleRepository;
 import com.hng.repository.PermissionRepository;
 import com.hng.repository.UserRepository; // Add UserRepository for fetching users
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 
 @Service
+@Slf4j
 public class RoleService {
 
     @Autowired
     private RoleRepository roleRepository;
+
+    @Autowired
+    private UserService userService;
 
     @Autowired
     private PermissionRepository permissionRepository;
@@ -31,8 +41,17 @@ public class RoleService {
     @Autowired
     private UserRepository userRepository; // Add UserRepository for fetching users
 
-    public void createRole(String roleName, String orgId, List<String> permissionNames) {
+    public void createRole(String roleName, String orgId, List<String> permissionNames, Authentication authentication) {
+
+        User currentUser = userService.findByEmail(authentication.getName())
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+
         Role role = new Role();
+
+        log.info("USER_INFO: {}", currentUser.toString());
+
+        role.getUsers().add(currentUser);
 
         role.setRoleName(roleName);
 

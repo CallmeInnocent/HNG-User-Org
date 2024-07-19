@@ -1,5 +1,6 @@
 package com.hng.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.hng.entity.Organisation;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,6 +10,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class OrganisationResponseDTO {
 
     private String status;
