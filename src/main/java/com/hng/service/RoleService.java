@@ -79,23 +79,25 @@ public class RoleService {
     // Assign a role to a user
     public void assignRoleToUser(String userId, String roleId, Authentication authentication) {
 
-        User currentUser = userService.findByEmail(authentication.getName())
+
+        User user = userService.findByUserId(userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
         Role role = roleRepository.findById(roleId).orElseThrow(() -> new RuntimeException("Role not found"));
-        currentUser.getRoles().add(role);
-        userRepository.save(currentUser);
+        user.getRoles().add(role);
+        role.getUsers().add(user);
+        roleRepository.save(role);
     }
 
     // Assign  roles to a user
-    public void assignRolesToUser(String userId, List<String> roleId,Authentication authentication) {
+    public void assignRolesToUser(String userId, List<String> roleId, Authentication authentication) {
 
-        User currentUser = userService.findByEmail(authentication.getName())
+        User user = userService.findByUserId(userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
         List<Role> roles = roleRepository.findAllById(roleId);
         for (Role role : roles) {
-            currentUser.getRoles().add(role);
+            user.getRoles().add(role);
         }
-        userRepository.save(currentUser);
+        userRepository.save(user);
     }
 }
 

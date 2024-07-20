@@ -1,6 +1,7 @@
 package com.hng.controller;
 
 
+import com.hng.dto.AssignRoleToUserResponseDto;
 import com.hng.dto.RoleCreationRequestDto;
 import com.hng.dto.RoleCreationResponseDto;
 import com.hng.service.RoleService;
@@ -32,20 +33,19 @@ public class RoleController {
 
     }
 
-//    // Endpoint to assign a role to a user
-//    @PostMapping("/{roleId}/assign-to-user/{userId}")
-//    @PreAuthorize("hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_SUPER_ADMIN')")
-//    public ResponseEntity<ResponseDto> assignRoleToUser(@PathVariable String roleId, @PathVariable String userId, Authentication authentication) {
-//        try {
-//            roleService.assignRoleToUser(userId, roleId,authentication);
-//
-//            ResponseDto responseDto = new ResponseDto("Role assigned to user successfully", null);
-//            return ResponseEntity.ok(responseDto);
-//        } catch (Exception e) {
-//            ResponseDto responseDto = new ResponseDto("Error assigning role to user: " + e.getMessage(), null);
-//            return ResponseEntity.status(500).body(responseDto);
-//        }
-//    }
+    // Endpoint to assign a role to a user
+    @PostMapping("/{roleId}/assign-to-user/{userId}")
+    public ResponseEntity<AssignRoleToUserResponseDto> assignRoleToUser(@PathVariable String roleId, @PathVariable String userId, Authentication authentication) {
+        try {
+            roleService.assignRoleToUser(userId, roleId,authentication);
+
+            AssignRoleToUserResponseDto responseDto = new AssignRoleToUserResponseDto("200", "Role assigned to user successfully");
+            return ResponseEntity.ok(responseDto);
+        } catch (Exception e) {
+            AssignRoleToUserResponseDto responseDto = new  AssignRoleToUserResponseDto ("400", "Error assigning role to user:" + e.getMessage());
+            return ResponseEntity.status(400).body(responseDto);
+        }
+    }
 //
 //    // Endpoint to assign multiple roles to a user
 //    @PostMapping("/{userId}/assign-roles")

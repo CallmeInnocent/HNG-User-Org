@@ -92,7 +92,7 @@ public class OrganisationService {
         Organisation organisation = organisationRepository.findById(orgId)
                 .orElseThrow(OrganisationNotFoundException::new);
 
-        User userToAdd = userService.findById(currentUser.getUserId())
+        User userToAdd = userService.findByUserId(currentUser.getUserId())
                 .orElseThrow(UserNotFoundException::new);
 
         organisation.getUsers().add(userToAdd);

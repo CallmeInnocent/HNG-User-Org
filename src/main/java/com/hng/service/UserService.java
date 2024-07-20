@@ -35,9 +35,10 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    public Optional<User> findById(String userId) {
+    public Optional<User> findByUserId(String userId) {
         return userRepository.findById(userId);
     }
+
 
     public Optional<User> findByEmail(String email) {
         return userRepository.findByEmail(email);
