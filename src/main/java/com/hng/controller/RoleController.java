@@ -4,6 +4,7 @@ package com.hng.controller;
 import com.hng.dto.RoleCreationRequestDto;
 import com.hng.dto.RoleCreationResponseDto;
 import com.hng.service.RoleService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/roles")
+@Slf4j
 public class RoleController {
 
     @Autowired
@@ -27,14 +29,15 @@ public class RoleController {
             RoleCreationResponseDto responseDto = new RoleCreationResponseDto(" 400", "Role creation failed.");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseDto);
         }
+
     }
 
 //    // Endpoint to assign a role to a user
 //    @PostMapping("/{roleId}/assign-to-user/{userId}")
 //    @PreAuthorize("hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_SUPER_ADMIN')")
-//    public ResponseEntity<ResponseDto> assignRoleToUser(@PathVariable String roleId, @PathVariable String userId) {
+//    public ResponseEntity<ResponseDto> assignRoleToUser(@PathVariable String roleId, @PathVariable String userId, Authentication authentication) {
 //        try {
-//            roleService.assignRoleToUser(userId, roleId);
+//            roleService.assignRoleToUser(userId, roleId,authentication);
 //
 //            ResponseDto responseDto = new ResponseDto("Role assigned to user successfully", null);
 //            return ResponseEntity.ok(responseDto);
@@ -47,9 +50,9 @@ public class RoleController {
 //    // Endpoint to assign multiple roles to a user
 //    @PostMapping("/{userId}/assign-roles")
 //    @PreAuthorize("hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_SUPER_ADMIN')")
-//    public ResponseEntity<ResponseDto> assignRolesToUser(@PathVariable String userId, @RequestBody List<String> roleIds) {
+//    public ResponseEntity<ResponseDto> assignRolesToUser(@PathVariable String userId, @RequestBody List<String> roleIds, Authentication authentication) {
 //        try {
-//            roleService.assignRolesToUser(userId, roleIds);
+//            roleService.assignRolesToUser(userId, roleIds,authentication);
 //
 //            ResponseDto responseDto = new ResponseDto("Roles assigned to user successfully", null);
 //            return ResponseEntity.ok(responseDto);

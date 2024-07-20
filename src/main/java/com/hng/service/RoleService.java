@@ -1,9 +1,6 @@
 package com.hng.service;
 
 
-import com.hng.dto.OrganisationData;
-import com.hng.dto.OrganisationDetail;
-import com.hng.dto.OrganisationResponseDTO;
 import com.hng.entity.Role;
 import com.hng.entity.Organisation;
 import com.hng.entity.Permission;
@@ -18,7 +15,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 
@@ -43,15 +39,8 @@ public class RoleService {
 
     public void createRole(String roleName, String orgId, List<String> permissionNames, Authentication authentication) {
 
-        User currentUser = userService.findByEmail(authentication.getName())
-                .orElseThrow(() -> new RuntimeException("User not found"));
-
 
         Role role = new Role();
-
-        log.info("USER_INFO: {}", currentUser.toString());
-
-        role.getUsers().add(currentUser);
 
         role.setRoleName(roleName);
 
@@ -69,6 +58,7 @@ public class RoleService {
         // Fetch organisation and set it to role
         Organisation organisation = organisationRepository.findById(orgId).orElseThrow();
         role.setOrganisation(organisation);
+        organisationRepository.save(organisation);
     }
 
     // Assign permissions to a role
@@ -78,27 +68,34 @@ public class RoleService {
         for (String permissionName : permissionNames) {
             Permission permission = new Permission();
             permission.setName(permissionName);
+            permissionRepository.save(permission);
             permissions.add(permission);
+
         }
+
         role.setPermissions(permissions);
     }
 
     // Assign a role to a user
-    public void assignRoleToUser(String userId, String roleId) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+    public void assignRoleToUser(String userId, String roleId, Authentication authentication) {
+
+        User currentUser = userService.findByEmail(authentication.getName())
+                .orElseThrow(() -> new RuntimeException("User not found"));
         Role role = roleRepository.findById(roleId).orElseThrow(() -> new RuntimeException("Role not found"));
-        user.getRoles().add(role);
-        userRepository.save(user);
+        currentUser.getRoles().add(role);
+        userRepository.save(currentUser);
     }
 
     // Assign  roles to a user
-    public void assignRolesToUser(String userId, List<String> roleId) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+    public void assignRolesToUser(String userId, List<String> roleId,Authentication authentication) {
+
+        User currentUser = userService.findByEmail(authentication.getName())
+                .orElseThrow(() -> new RuntimeException("User not found"));
         List<Role> roles = roleRepository.findAllById(roleId);
         for (Role role : roles) {
-            user.getRoles().add(role);
+            currentUser.getRoles().add(role);
         }
-        userRepository.save(user);
+        userRepository.save(currentUser);
     }
 }
 

@@ -1,8 +1,6 @@
 package com.hng.service;
 
 import com.hng.dto.UserRegistrationRequestDto;
-import com.hng.entity.Permission;
-import com.hng.entity.Role;
 import com.hng.entity.User;
 import com.hng.repository.PermissionRepository;
 import com.hng.repository.RoleRepository;
@@ -11,9 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
 import java.util.Optional;
-import java.util.Set;
 
 @Service
 public class UserService {
